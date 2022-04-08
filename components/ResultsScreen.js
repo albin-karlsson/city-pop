@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 
 function ResultsScreen({ route, navigation }) {
-  const { mode } = route.params;
+  const { mode, searchTerm } = route.params;
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
@@ -14,7 +14,7 @@ function ResultsScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{mode.toUpperCase()}</Text>
+      <Text style={styles.header}>{searchTerm.toUpperCase()}</Text>
     </View>
   );
 }
