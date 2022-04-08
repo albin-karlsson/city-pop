@@ -72,13 +72,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   header: {
-    marginTop: 80,
+    marginTop: 100,
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
   },
   textInput: {
-    marginBottom: 20,
+    marginBottom: 15,
     borderWidth: 2,
     borderColor: "black",
     borderRadius: 5,
