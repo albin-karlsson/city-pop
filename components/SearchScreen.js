@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   header: {
-    marginTop: 100,
+    marginTop: 120,
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
