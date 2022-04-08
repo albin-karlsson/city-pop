@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
+import { View, Text } from "react-native";
 
-function ResultsScreen() {
+function ResultsScreen({ navigation }) {
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
       e.preventDefault(); // Prevent default action
