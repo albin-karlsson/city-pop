@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
-import IconFontAwesome from "react-native-vector-icons/FontAwesome5";
+import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 
 // Pass country or city as route from home screen
 function SearchScreen({ route, navigation }) {
@@ -31,7 +31,7 @@ function SearchScreen({ route, navigation }) {
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        Keyboard.dismiss();
+        Keyboard.dismiss(); // A press outside the keyboard will dismiss it if its present
       }}
     >
       <View style={styles.container}>
@@ -42,19 +42,12 @@ function SearchScreen({ route, navigation }) {
           style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
         >
           <TextInput
-            style={{
-              marginBottom: 20,
-              borderWidth: 2,
-              borderColor: "black",
-              borderRadius: 5,
-              padding: 10,
-              width: "90%",
-            }}
+            style={styles.textInput}
             placeholder={`Enter a ${mode}`}
             onChangeText={setSearchTerm}
           />
           <TouchableOpacity onPress={showResults}>
-            <IconFontAwesome
+            <FontAwesome5Icon
               style={{
                 borderWidth: 2,
                 borderColor: "black",
@@ -74,14 +67,22 @@ function SearchScreen({ route, navigation }) {
 export default SearchScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   header: {
     marginTop: 80,
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
   },
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
+  textInput: {
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: "black",
+    borderRadius: 5,
+    padding: 10,
+    width: "90%",
   },
 });
