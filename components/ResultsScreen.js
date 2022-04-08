@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 
 function ResultsScreen({ navigation }) {
   useEffect(() => {
@@ -11,10 +11,23 @@ function ResultsScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Results Screen</Text>
+    <View style={styles.container}>
+      <Text style={styles.header}>CITY</Text>
     </View>
   );
 }
 
 export default ResultsScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  header: {
+    marginTop: 120,
+    fontSize: 30,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+});
