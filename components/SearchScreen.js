@@ -3,10 +3,11 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
+  Keyboard,
   TextInput,
   Alert,
   TouchableOpacity,
+  TouchableWithoutFeedback,
 } from "react-native";
 import IconFontAwesome from "react-native-vector-icons/FontAwesome5";
 
@@ -28,37 +29,45 @@ function SearchScreen({ route, navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>
-        SEARCH BY {"\n"} {mode.toUpperCase()}
-      </Text>
-      <View style={{ alignItems: "center", justifyContent: "center", flex: 1 }}>
-        <TextInput
-          style={{
-            marginBottom: 20,
-            borderWidth: 2,
-            borderColor: "black",
-            borderRadius: 5,
-            padding: 10,
-            width: "90%",
-          }}
-          placeholder={`Enter a ${mode}`}
-          onChangeText={setSearchTerm}
-        />
-        <TouchableOpacity onPress={showResults}>
-          <IconFontAwesome
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+      }}
+    >
+      <View style={styles.container}>
+        <Text style={styles.header}>
+          SEARCH BY {"\n"} {mode.toUpperCase()}
+        </Text>
+        <View
+          style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
+        >
+          <TextInput
             style={{
+              marginBottom: 20,
               borderWidth: 2,
               borderColor: "black",
-              borderRadius: 30,
+              borderRadius: 5,
               padding: 10,
+              width: "90%",
             }}
-            name="search"
-            size={40}
+            placeholder={`Enter a ${mode}`}
+            onChangeText={setSearchTerm}
           />
-        </TouchableOpacity>
+          <TouchableOpacity onPress={showResults}>
+            <IconFontAwesome
+              style={{
+                borderWidth: 2,
+                borderColor: "black",
+                borderRadius: 30,
+                padding: 10,
+              }}
+              name="search"
+              size={40}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
