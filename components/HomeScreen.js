@@ -6,8 +6,12 @@ function HomeScreen({ navigation }) {
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>Home Screen</Text>
       <Button
-        title="Go to Search"
-        onPress={() => navigation.navigate("Search")}
+        title="Search by city"
+        onPress={() => navigation.navigate("Search", { mode: "city" })}
+      />
+      <Button
+        title="Search by country"
+        onPress={() => navigation.navigate("Search", { mode: "country" })}
       />
     </View>
   );
