@@ -22,7 +22,7 @@ function SearchScreen({ route, navigation }) {
       // Send those results to the results page
       // If no results, promt the user to add a new country or city
 
-      navigation.navigate("Results");
+      navigation.navigate("Results", { mode: mode });
     } else {
       Alert.alert("Ooops...", `Please enter a ${mode}`);
     }
