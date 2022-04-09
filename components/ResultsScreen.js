@@ -26,15 +26,13 @@ function ResultsScreen({ route, navigation }) {
       determineCountry();
 
       // Filter city options on being cities in the current country and without a numeric included in their name property
-      const filteredData = data
-        .filter((el) => {
-          return (
-            el.fclName.includes("city") &&
-            el.countryName.toUpperCase().includes(result.toUpperCase()) &&
-            !/\d/.test(el.name)
-          );
-        })
-        .slice(0, 50);
+      const filteredData = data.filter((el) => {
+        return (
+          el.fclName.includes("city") &&
+          el.countryName.toUpperCase().includes(result.toUpperCase()) &&
+          !/\d/.test(el.name)
+        );
+      });
 
       setFilteredData(filteredData);
     }

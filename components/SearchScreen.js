@@ -14,9 +14,12 @@ import SearchBar from "./SearchBar";
 function SearchScreen({ route, navigation }) {
   const { mode } = route.params;
   let [searchTerm, setSearchTerm] = useState("");
+  let [loading, setLoading] = useState(false);
 
   const showResults = async () => {
     if (searchTerm.length > 1) {
+      setLoading(true);
+
       // Remove whitespace from search term
       searchTerm = searchTerm.trim();
 
@@ -28,21 +31,27 @@ function SearchScreen({ route, navigation }) {
       const data = await res.json();
 
       // If api call successful... Navigate to results page
-      if (
-        data.totalResultsCount > 0 &&
-        data.geonames.filter((el) => {
-          el.fclName.includes(mode).length > 0;
-        })
-      ) {
-        navigation.navigate("Results", {
-          mode: mode,
-          searchTerm: searchTerm,
-          data: data.geonames,
-        });
+      if (data.totalResultsCount > 0) {
+        // Slice api data array for convenience
+        const slicedData = data.geonames.slice(0, 50);
+
+        if (
+          slicedData.geonames.filter((el) => {
+            el.fclName.includes(mode).length > 0;
+          })
+        ) {
+          navigation.navigate("Results", {
+            mode: mode,
+            searchTerm: searchTerm,
+            data: slicedData,
+          });
+        }
       } // If no results from api call
       else {
         Alert.alert("Ooops...", `Please enter another ${mode}`);
       }
+
+      setLoading(false);
     } // If no search term
     else {
       Alert.alert("Ooops...", `Please enter a ${mode}`);
@@ -67,18 +76,22 @@ function SearchScreen({ route, navigation }) {
           style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
         >
           <SearchBar onSearchInput={handleSearchInput} mode={mode} />
-          <TouchableOpacity onPress={showResults}>
-            <FontAwesome5Icon
-              style={{
-                borderWidth: 2,
-                borderColor: "black",
-                borderRadius: 30,
-                padding: 10,
-              }}
-              name="search"
-              size={40}
-            />
-          </TouchableOpacity>
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : (
+            <TouchableOpacity onPress={showResults}>
+              <FontAwesome5Icon
+                style={{
+                  borderWidth: 2,
+                  borderColor: "black",
+                  borderRadius: 30,
+                  padding: 10,
+                }}
+                name="search"
+                size={40}
+              />
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </TouchableWithoutFeedback>
