@@ -16,13 +16,26 @@ function SearchScreen({ route, navigation }) {
   const { mode } = route.params;
   const [searchTerm, setSearchTerm] = useState("");
 
-  const showResults = () => {
+  const showResults = async () => {
     if (searchTerm.length > 1) {
       // Make API call to check if any results
       // Send those results to the results page
       // If no results, promt the user to add a new country or city
 
-      navigation.navigate("Results", { mode: mode, searchTerm: searchTerm });
+      const url = `http://api.geonames.org/searchJSON?q=${searchTerm}&username=weknowit`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      if (data.totalResultsCount > 0) {
+        navigation.navigate("Results", {
+          mode: mode,
+          searchTerm: searchTerm,
+          data: data.geonames,
+        });
+      } else {
+        Alert.alert("Ooops...", `Please enter another ${mode}`);
+      }
     } else {
       Alert.alert("Ooops...", `Please enter a ${mode}`);
     }
