@@ -12,9 +12,16 @@ function ResultsScreen({ route, navigation }) {
     });
   }, []);
 
+  const ResultsDisplay = () => {
+    if (mode !== "city") {
+      return <Text>Displaying {mode} options...</Text>;
+    } else return <Text>Displaying cities..</Text>;
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{searchTerm.toUpperCase()}</Text>
+      <View>{ResultsDisplay()}</View>
     </View>
   );
 }

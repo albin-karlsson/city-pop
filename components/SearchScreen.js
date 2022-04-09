@@ -10,8 +10,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
+import SearchBar from "./SearchBar";
 
-// Pass country or city as route from home screen
 function SearchScreen({ route, navigation }) {
   const { mode } = route.params;
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,6 +28,10 @@ function SearchScreen({ route, navigation }) {
     }
   };
 
+  const handleSearchInput = (input) => {
+    setSearchTerm(input);
+  };
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -41,11 +45,7 @@ function SearchScreen({ route, navigation }) {
         <View
           style={{ alignItems: "center", justifyContent: "center", flex: 1 }}
         >
-          <TextInput
-            style={styles.textInput}
-            placeholder={`Enter a ${mode}`}
-            onChangeText={setSearchTerm}
-          />
+          <SearchBar onSearchInput={handleSearchInput} mode={mode} />
           <TouchableOpacity onPress={showResults}>
             <FontAwesome5Icon
               style={{
@@ -76,13 +76,5 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
-  },
-  textInput: {
-    marginBottom: 15,
-    borderWidth: 2,
-    borderColor: "black",
-    borderRadius: 5,
-    padding: 10,
-    width: "90%",
   },
 });
