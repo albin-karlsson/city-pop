@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, Alert } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 
 function ResultsScreen({ route, navigation }) {
   const { mode, data } = route.params;
@@ -12,6 +18,10 @@ function ResultsScreen({ route, navigation }) {
     });
   }, []);
 
+  const handleCitySelect = (cityName) => {
+    console.log(cityName);
+  };
+
   const ResultDisplay = () => {
     if (mode !== "city") {
       return (
@@ -20,7 +30,17 @@ function ResultsScreen({ route, navigation }) {
           <FlatList
             data={data}
             renderItem={({ item }) => {
-              return <Text>{item.name}</Text>;
+              return (
+                <TouchableOpacity>
+                  <Text
+                    onPress={() => {
+                      handleCitySelect(item.name);
+                    }}
+                  >
+                    {item.name}
+                  </Text>
+                </TouchableOpacity>
+              );
             }}
             keyExtractor={(item) => item.geonameId}
           />
@@ -28,12 +48,32 @@ function ResultsScreen({ route, navigation }) {
       );
     } else
       return (
-        <View>
+        <View style={{ alignItems: "center" }}>
           <Text style={styles.header}>{data[0].name.toUpperCase()}</Text>
-          <Text>
-            Displaying population results for {data[0].name}... pop :{" "}
-            {data[0].population}
-          </Text>
+          <View
+            style={{
+              borderWidth: 2,
+              borderColor: "black",
+              padding: 5,
+              width: "90%",
+              height: 180,
+              marginTop: 200,
+              position: "relative",
+            }}
+          >
+            <Text style={{ textAlign: "center", fontSize: 15 }}>
+              POPULATION
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                marginTop: 40,
+                fontSize: 40,
+              }}
+            >
+              {data[0].population}
+            </Text>
+          </View>
         </View>
       );
   };
