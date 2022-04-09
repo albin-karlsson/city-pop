@@ -13,10 +13,13 @@ import SearchBar from "./SearchBar";
 
 function SearchScreen({ route, navigation }) {
   const { mode } = route.params;
-  const [searchTerm, setSearchTerm] = useState("");
+  let [searchTerm, setSearchTerm] = useState("");
 
   const showResults = async () => {
     if (searchTerm.length > 1) {
+      // Remove whitespace from search term
+      searchTerm = searchTerm.trim();
+
       // Construct api url
       const url = `http://api.geonames.org/searchJSON?q=${searchTerm}&username=weknowit`;
 

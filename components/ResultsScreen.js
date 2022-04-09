@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList } from "react-native";
+import { StyleSheet, View, Text, FlatList, Alert } from "react-native";
 
 function ResultsScreen({ route, navigation }) {
   const { mode, searchTerm, data } = route.params;
@@ -19,9 +19,16 @@ function ResultsScreen({ route, navigation }) {
   const formatData = () => {
     // If mode is not city
     if (mode !== "city") {
+      // Set most plausible country
       determineCountry();
+
+      // Filter city options on being cities in the current country and without a numeric included in their name property
       const filteredData = data.filter((el) => {
-        return el.fclName.includes("city") && el.countryName.includes(country);
+        return (
+          el.fclName.includes("city") &&
+          el.countryName.includes(country) &&
+          !/\d/.test(el.name)
+        );
       });
 
       setFilteredData(filteredData);
@@ -32,6 +39,7 @@ function ResultsScreen({ route, navigation }) {
   };
 
   const determineCountry = () => {
+    // Get most plausible country name judging from api results
     country = data
       .map((el) => {
         return el.countryName;
@@ -43,6 +51,14 @@ function ResultsScreen({ route, navigation }) {
       )
       .pop();
 
+    // Alert user if another (more plausible) country was found
+    if (country.toUpperCase() !== searchTerm.toUpperCase()) {
+      Alert.alert(
+        "Ooops...",
+        `No exact match found! Showing results for ${country}`
+      );
+    }
+
     setCountry(country);
   };
 
@@ -50,11 +66,11 @@ function ResultsScreen({ route, navigation }) {
     if (mode !== "city") {
       return (
         <FlatList
-          keyExtractor={(item) => item.geonameId}
           data={filteredData}
-          renderItem={(item) => {
-            <Text>{item.name}</Text>;
+          renderItem={({ item }) => {
+            return <Text>{item.name}</Text>;
           }}
+          keyExtractor={(item) => item.geonameId}
         />
       );
     } else return <Text>Displaying city population results..</Text>;
@@ -63,7 +79,7 @@ function ResultsScreen({ route, navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{country.toUpperCase()}</Text>
-      <View>{ResultsDisplay()}</View>
+      {ResultsDisplay()}
     </View>
   );
 }
