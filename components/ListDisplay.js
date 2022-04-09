@@ -5,9 +5,10 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
-function ListDisplay({ onSelectCity, sortedCities }) {
+function ListDisplay({ onSelectCity, sortedCities, navigation }) {
   return (
     <View>
       <Text style={styles.header}>
@@ -15,6 +16,19 @@ function ListDisplay({ onSelectCity, sortedCities }) {
       </Text>
       <View style={{ marginTop: 200 }}>
         <FlatList
+          onEndReached={() => {
+            Alert.alert("Not here?", "Try searching for a city instead", [
+              {
+                text: "Cancel",
+                style: "cancel",
+              },
+              {
+                text: "OK",
+                onPress: () => navigation.navigate("Home"),
+              },
+            ]);
+          }}
+          onEndReachedThreshold={0.5}
           ListFooterComponent={<View style={{ height: 400 }} />}
           data={sortedCities}
           renderItem={({ item }) => {

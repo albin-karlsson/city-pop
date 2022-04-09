@@ -50,6 +50,7 @@ function ResultsScreen({ route, navigation }) {
         <ListDisplay
           onSelectCity={handleCitySelect}
           sortedCities={sortedCities}
+          navigation={navigation}
         />
       );
     } else return <CityDisplay city={city} />;

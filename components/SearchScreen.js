@@ -37,8 +37,6 @@ function SearchScreen({ route, navigation }) {
         // Filter data from api
         const filterResult = filterData(data);
 
-        console.log(filterResult);
-
         // Check for relevant data after filtering
         if (filterResult.length == 0) {
           Alert.alert(
