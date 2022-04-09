@@ -9,48 +9,67 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
+import infoLog from "react-native/Libraries/Utilities/infoLog";
 import SearchBar from "./SearchBar";
 
 function SearchScreen({ route, navigation }) {
   const { mode } = route.params;
   let [searchTerm, setSearchTerm] = useState("");
   let [loading, setLoading] = useState(false);
+  let filterResult = [];
 
   const showResults = async () => {
     if (searchTerm.length > 1) {
+      // Set loading parameter to true
       setLoading(true);
 
       // Remove whitespace from search term
       searchTerm = searchTerm.trim();
 
       // Construct api url
-      const url = `http://api.geonames.org/searchJSON?q=${searchTerm}&username=weknowit`;
+      const username = "weknowit";
+      const url = `http://api.geonames.org/searchJSON?q=${searchTerm}&username=${username}`;
 
       // Make async api call and convert to JavaScript object
       const res = await fetch(url);
       const data = await res.json();
 
-      // If api call successful... Navigate to results page
+      // If data retrieved from api
       if (data.totalResultsCount > 0) {
-        // Slice api data array for convenience
-        const slicedData = data.geonames.slice(0, 50);
+        if (mode !== "city") {
+          // Filter for relevant country name and get all cities
+          filterResult = data.geonames.filter(
+            (el) =>
+              el.countryName !== undefined &&
+              el.countryName.toUpperCase() === searchTerm.toUpperCase() &&
+              el.fclName.includes("city") &&
+              !/\d/.test(el.name)
+          );
+        } else {
+          // Filter for relevant city name
+          filterResult = data.geonames.filter(
+            (el) =>
+              el !== undefined &&
+              el.name.toUpperCase() === searchTerm.toUpperCase() &&
+              el.fclName.includes("city") &&
+              !/\d/.test(el.name)
+          );
+        }
 
-        if (
-          slicedData.geonames.filter((el) => {
-            el.fclName.includes(mode).length > 0;
-          })
-        ) {
+        if (filterResult.length > 0) {
           navigation.navigate("Results", {
             mode: mode,
-            searchTerm: searchTerm,
-            data: slicedData,
+            data: filterResult,
           });
         }
-      } // If no results from api call
-      else {
-        Alert.alert("Ooops...", `Please enter another ${mode}`);
       }
-
+      if (data.totalResultsCount == 0 || filterResult.length == 0) {
+        Alert.alert(
+          "Ooops...",
+          `No ${mode} called ${searchTerm} that was found, try searching for something else!`
+        );
+      }
+      // Reset loading parameter
       setLoading(false);
     } // If no search term
     else {
@@ -77,7 +96,7 @@ function SearchScreen({ route, navigation }) {
         >
           <SearchBar onSearchInput={handleSearchInput} mode={mode} />
           {loading ? (
-            <Text>Loading...</Text>
+            <Text style={{ fontSize: 20 }}>Loading...</Text>
           ) : (
             <TouchableOpacity onPress={showResults}>
               <FontAwesome5Icon
