@@ -12,6 +12,7 @@ function ResultsScreen({ route, navigation }) {
   let [viewMode, setViewMode] = useState(mode);
   let [city, setCity] = useState({});
   let [sortedCities, setSortedCities] = useState([]);
+  let [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
@@ -21,15 +22,17 @@ function ResultsScreen({ route, navigation }) {
     });
 
     //Sort list of cities according to their population
-    if (mode !== "city") {
-      sortedCities = data.sort((a, b) => {
-        return b.population - a.population;
-      });
-      setSortedCities(sortedCities);
-    } else {
-      // Set city to first element in data
-      setCity((city = data[0]));
+    sortedCities = data.sort((a, b) => {
+      return b.population - a.population;
+    });
+    setSortedCities(sortedCities);
+
+    // Set city to the most populated city
+    if (viewMode === "city") {
+      setCity((city = sortedCities[0]));
     }
+
+    setLoading(false);
   }, []);
 
   const handleCitySelect = (cityName) => {
@@ -90,7 +93,11 @@ function ResultsScreen({ route, navigation }) {
       );
   };
 
-  return <View style={styles.container}>{ResultsDisplay()}</View>;
+  return (
+    <View style={styles.container}>
+      {loading ? <Text>Loading...</Text> : ResultsDisplay()}
+    </View>
+  );
 }
 
 export default ResultsScreen;

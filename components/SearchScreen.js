@@ -57,11 +57,10 @@ function SearchScreen({ route, navigation }) {
         }
 
         if (filterResult.length > 0) {
-          console.log(filterResult);
-          // navigation.navigate("Results", {
-          //   mode: mode,
-          //   data: filterResult,
-          // });
+          navigation.navigate("Results", {
+            mode: mode,
+            data: filterResult,
+          });
         }
       }
       if (data.totalResultsCount == 0 || filterResult.length == 0) {
