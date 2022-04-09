@@ -9,6 +9,9 @@ import {
 
 function ResultsScreen({ route, navigation }) {
   const { mode, data } = route.params;
+  let [viewMode, setViewMode] = useState(mode);
+  let [city, setCity] = useState({});
+  let [sortedCities, setSortedCities] = useState([]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
@@ -16,58 +19,67 @@ function ResultsScreen({ route, navigation }) {
       unsubscribe(); // Unsubscribe the event on first call to prevent infinite loop
       navigation.navigate("Home"); // Navigate to the home screen (don't just go back one step)
     });
+
+    //Sort list of cities according to their population
+    if (mode !== "city") {
+      sortedCities = data.sort((a, b) => {
+        return b.population - a.population;
+      });
+      setSortedCities(sortedCities);
+    } else {
+      // Set city to first element in data
+      setCity((city = data[0]));
+    }
   }, []);
 
   const handleCitySelect = (cityName) => {
-    console.log(cityName);
+    const city = data
+      .filter((city) => {
+        return city.name === cityName;
+      })
+      .shift();
+
+    setCity(city);
+    setViewMode((viewMode = "city"));
   };
 
-  const ResultDisplay = () => {
-    if (mode !== "city") {
+  const ResultsDisplay = () => {
+    if (viewMode !== "city") {
       return (
         <View>
           <Text style={styles.header}>{data[0].countryName.toUpperCase()}</Text>
-          <FlatList
-            data={data}
-            renderItem={({ item }) => {
-              return (
-                <TouchableOpacity>
-                  <Text
+          <View style={{ marginTop: 200 }}>
+            <FlatList
+              data={sortedCities}
+              renderItem={({ item }) => {
+                return (
+                  <TouchableOpacity
+                    style={{ alignItems: "center" }}
                     onPress={() => {
                       handleCitySelect(item.name);
                     }}
                   >
-                    {item.name}
-                  </Text>
-                </TouchableOpacity>
-              );
-            }}
-            keyExtractor={(item) => item.geonameId}
-          />
+                    <Text style={styles.listText}>{item.name}</Text>
+                  </TouchableOpacity>
+                );
+              }}
+              keyExtractor={(item) => item.geonameId}
+            />
+          </View>
         </View>
       );
     } else
       return (
         <View style={{ alignItems: "center" }}>
-          <Text style={styles.header}>{data[0].name.toUpperCase()}</Text>
-          <View
-            style={{
-              borderWidth: 2,
-              borderColor: "black",
-              padding: 5,
-              width: "90%",
-              height: 180,
-              marginTop: 200,
-              position: "relative",
-            }}
-          >
+          <Text style={styles.header}>{city.name.toUpperCase()}</Text>
+          <View style={styles.popDisplay}>
             <Text style={{ textAlign: "center", fontSize: 15 }}>
               POPULATION
             </Text>
             <Text
               style={{
                 textAlign: "center",
-                marginTop: 40,
+                marginTop: 45,
                 fontSize: 40,
               }}
             >
@@ -78,7 +90,7 @@ function ResultsScreen({ route, navigation }) {
       );
   };
 
-  return <View style={styles.container}>{ResultDisplay()}</View>;
+  return <View style={styles.container}>{ResultsDisplay()}</View>;
 }
 
 export default ResultsScreen;
@@ -93,5 +105,23 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  popDisplay: {
+    borderWidth: 2,
+    borderColor: "black",
+    padding: 5,
+    width: "90%",
+    height: 180,
+    marginTop: 200,
+    position: "relative",
+  },
+  listText: {
+    borderWidth: 2,
+    borderColor: "black",
+    width: "90%",
+    textAlign: "center",
+    padding: 15,
+    fontSize: 15,
+    margin: 5,
   },
 });
