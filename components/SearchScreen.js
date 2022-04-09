@@ -39,10 +39,27 @@ function SearchScreen({ route, navigation }) {
 
         // Check for relevant data after filtering
         if (filterResult.length == 0) {
-          Alert.alert(
-            "Ooops...",
-            `No relevant population data found searching for ${searchTerm}, try searching for something else!`
-          );
+          if (mode !== "city") {
+            Alert.alert(
+              "Ooops...",
+              `No population data found searching for ${searchTerm}, did you mean to search for a city?`,
+              [
+                {
+                  text: "Cancel",
+                },
+                {
+                  text: "Yes",
+                  onPress: () =>
+                    navigation.navigate("Search", { mode: "city" }),
+                },
+              ]
+            );
+          } else {
+            Alert.alert(
+              "Ooops...",
+              `No population data found searching for ${searchTerm}, try searching for something else!`
+            );
+          }
         } else {
           // Navigate to ResultsScreen
           navigation.navigate("Results", {

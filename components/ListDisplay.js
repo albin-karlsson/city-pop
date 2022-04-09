@@ -20,7 +20,6 @@ function ListDisplay({ onSelectCity, sortedCities, navigation }) {
             Alert.alert("Not here?", "Try searching for a city instead", [
               {
                 text: "Cancel",
-                style: "cancel",
               },
               {
                 text: "OK",
