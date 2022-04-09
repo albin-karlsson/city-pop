@@ -32,6 +32,7 @@ function ResultsScreen({ route, navigation }) {
     setLoading(false);
   }, []);
 
+  // Filter cities for the incoming city name and set city
   const handleCitySelect = (cityName) => {
     const city = data
       .filter((city) => {
