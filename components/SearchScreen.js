@@ -9,7 +9,6 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
-import { elementsThatOverlapOffsets } from "react-native/Libraries/Lists/VirtualizeUtils";
 import SearchBar from "./SearchBar";
 
 function SearchScreen({ route, navigation }) {
@@ -36,44 +35,28 @@ function SearchScreen({ route, navigation }) {
 
       // If data retrieved from api
       if (data.totalResultsCount > 0) {
-        // Filter list to be cities with a population larger than 0, and that has no numerics in their name
-        filterResult = data.geonames.filter((el) => {
-          if (
-            el.fclName.includes("city") &&
-            !/\d/.test(el.name) &&
-            el.population > 0
-          ) {
-            // Add special conditionals for non city searches
-            if (mode !== "city") {
-              if (
-                el.countryName !== undefined &&
-                el.countryName.toUpperCase() === searchTerm.toUpperCase()
-              ) {
-                return el;
-              } // Add special conditionals for city searches
-            } else {
-              if (
-                el !== undefined &&
-                el.name.toUpperCase() === searchTerm.toUpperCase()
-              ) {
-                return el;
-              }
-            }
-          }
-        });
+        // Filter data from api
+        const filterResult = filterData(data);
 
-        // If relevant information was found
-        if (filterResult.length > 0) {
+        // Check for relevant data after filtering
+        if (filterResult.length == 0) {
+          Alert.alert(
+            "Ooops...",
+            `No population data for ${searchTerm}, try searching for something else!`
+          );
+        } else {
+          // Navigate to ResultsScreen
           navigation.navigate("Results", {
             mode: mode,
             data: filterResult,
           });
         }
       }
-      if (data.totalResultsCount == 0 || filterResult.length == 0) {
+      // If no data was retrieved from the api
+      if (data.totalResultsCount == 0) {
         Alert.alert(
           "Ooops...",
-          `No ${mode} called ${searchTerm} was found, or ${searchTerm} has no population data, try searching for something else!`
+          `No ${mode} called ${searchTerm} was found, try searching for something else!`
         );
       }
       // Reset loading parameter
@@ -84,6 +67,35 @@ function SearchScreen({ route, navigation }) {
     }
   };
 
+  // Filter list to be cities with a population larger than 0, and that has no numerics in their name
+  const filterData = (data) => {
+    return data.geonames.filter((el) => {
+      if (
+        el.fclName.includes("city") &&
+        !/\d/.test(el.name) &&
+        el.population > 0
+      ) {
+        // Add special conditionals for non city searches
+        if (mode !== "city") {
+          if (
+            el.countryName !== undefined &&
+            el.countryName.toUpperCase() === searchTerm.toUpperCase()
+          ) {
+            return el;
+          } // Add special conditionals for city searches
+        } else {
+          if (
+            el !== undefined &&
+            el.name.toUpperCase() === searchTerm.toUpperCase()
+          ) {
+            return el;
+          }
+        }
+      }
+    });
+  };
+
+  // Set search term from child component
   const handleSearchInput = (input) => {
     setSearchTerm(input);
   };
