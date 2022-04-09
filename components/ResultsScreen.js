@@ -57,7 +57,11 @@ function ResultsScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      {loading ? <Text>Loading...</Text> : ResultsDisplay()}
+      {loading ? (
+        <Text style={{ fontSize: 20 }}>Loading...</Text>
+      ) : (
+        ResultsDisplay()
+      )}
     </View>
   );
 }
