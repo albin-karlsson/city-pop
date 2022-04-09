@@ -46,6 +46,10 @@ function ResultsScreen({ route, navigation }) {
     setViewMode((viewMode = "city"));
   };
 
+  const formatPopulation = (population) => {
+    return population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  };
+
   const ResultsDisplay = () => {
     if (viewMode !== "city") {
       return (
@@ -53,6 +57,7 @@ function ResultsScreen({ route, navigation }) {
           <Text style={styles.header}>{data[0].countryName.toUpperCase()}</Text>
           <View style={{ marginTop: 200 }}>
             <FlatList
+              ListFooterComponent={<View style={{ height: 400 }} />}
               data={sortedCities}
               renderItem={({ item }) => {
                 return (
@@ -86,7 +91,7 @@ function ResultsScreen({ route, navigation }) {
                 fontSize: 40,
               }}
             >
-              {data[0].population}
+              {formatPopulation(city.population)}
             </Text>
           </View>
         </View>

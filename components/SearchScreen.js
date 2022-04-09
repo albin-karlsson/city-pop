@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
-import infoLog from "react-native/Libraries/Utilities/infoLog";
+import { elementsThatOverlapOffsets } from "react-native/Libraries/Lists/VirtualizeUtils";
 import SearchBar from "./SearchBar";
 
 function SearchScreen({ route, navigation }) {
@@ -36,26 +36,33 @@ function SearchScreen({ route, navigation }) {
 
       // If data retrieved from api
       if (data.totalResultsCount > 0) {
-        if (mode !== "city") {
-          // Filter for relevant country name and get all cities
-          filterResult = data.geonames.filter(
-            (el) =>
-              el.countryName !== undefined &&
-              el.countryName.toUpperCase() === searchTerm.toUpperCase() &&
-              el.fclName.includes("city") &&
-              !/\d/.test(el.name)
-          );
-        } else {
-          // Filter for relevant city name
-          filterResult = data.geonames.filter(
-            (el) =>
-              el !== undefined &&
-              el.name.toUpperCase() === searchTerm.toUpperCase() &&
-              el.fclName.includes("city") &&
-              !/\d/.test(el.name)
-          );
-        }
+        // Filter list to be cities with a population larger than 0, and that has no numerics in their name
+        filterResult = data.geonames.filter((el) => {
+          if (
+            el.fclName.includes("city") &&
+            !/\d/.test(el.name) &&
+            el.population > 0
+          ) {
+            // Add special conditionals for non city searches
+            if (mode !== "city") {
+              if (
+                el.countryName !== undefined &&
+                el.countryName.toUpperCase() === searchTerm.toUpperCase()
+              ) {
+                return el;
+              } // Add special conditionals for city searches
+            } else {
+              if (
+                el !== undefined &&
+                el.name.toUpperCase() === searchTerm.toUpperCase()
+              ) {
+                return el;
+              }
+            }
+          }
+        });
 
+        // If relevant information was found
         if (filterResult.length > 0) {
           navigation.navigate("Results", {
             mode: mode,
@@ -66,7 +73,7 @@ function SearchScreen({ route, navigation }) {
       if (data.totalResultsCount == 0 || filterResult.length == 0) {
         Alert.alert(
           "Ooops...",
-          `No ${mode} called ${searchTerm} that was found, try searching for something else!`
+          `No ${mode} called ${searchTerm} was found, or ${searchTerm} has no population data, try searching for something else!`
         );
       }
       // Reset loading parameter
