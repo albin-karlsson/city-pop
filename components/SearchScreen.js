@@ -28,7 +28,12 @@ function SearchScreen({ route, navigation }) {
       const data = await res.json();
 
       // If api call successful... Navigate to results page
-      if (data.totalResultsCount > 0) {
+      if (
+        data.totalResultsCount > 0 &&
+        data.geonames.filter((el) => {
+          el.fclName.includes(mode).length > 0;
+        })
+      ) {
         navigation.navigate("Results", {
           mode: mode,
           searchTerm: searchTerm,

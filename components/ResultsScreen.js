@@ -3,8 +3,9 @@ import { StyleSheet, View, Text, FlatList, Alert } from "react-native";
 
 function ResultsScreen({ route, navigation }) {
   const { mode, searchTerm, data } = route.params;
-  let [country, setCountry] = useState("");
+  let [result, setResult] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  let [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("beforeRemove", (e) => {
@@ -14,6 +15,8 @@ function ResultsScreen({ route, navigation }) {
     });
 
     formatData();
+
+    setLoading(false);
   }, []);
 
   const formatData = () => {
@@ -23,24 +26,28 @@ function ResultsScreen({ route, navigation }) {
       determineCountry();
 
       // Filter city options on being cities in the current country and without a numeric included in their name property
-      const filteredData = data.filter((el) => {
-        return (
-          el.fclName.includes("city") &&
-          el.countryName.includes(country) &&
-          !/\d/.test(el.name)
-        );
-      });
+      const filteredData = data
+        .filter((el) => {
+          return (
+            el.fclName.includes("city") &&
+            el.countryName.toUpperCase().includes(result.toUpperCase()) &&
+            !/\d/.test(el.name)
+          );
+        })
+        .slice(0, 50);
 
       setFilteredData(filteredData);
     }
     // Show city population results
     else {
+      // Set most plausible city
+      determineCity();
     }
   };
 
   const determineCountry = () => {
     // Get most plausible country name judging from api results
-    country = data
+    result = data
       .map((el) => {
         return el.countryName;
       })
@@ -52,34 +59,58 @@ function ResultsScreen({ route, navigation }) {
       .pop();
 
     // Alert user if another (more plausible) country was found
-    if (country.toUpperCase() !== searchTerm.toUpperCase()) {
+    if (result.toUpperCase() !== searchTerm.toUpperCase()) {
       Alert.alert(
         "Ooops...",
-        `No exact match found! Showing results for ${country}`
+        `No exact match found for ${searchTerm}! Showing results for ${result}`
       );
     }
 
-    setCountry(country);
+    setResult(result);
   };
 
-  const ResultsDisplay = () => {
+  const determineCity = () => {
+    result = data
+      .filter((el) => {
+        return el.fclName.includes("city") && !/\d/.test(el.name);
+      })
+      .sort((a, b) => {
+        return b.population - a.population;
+      })[0];
+
+    setResult(result);
+  };
+
+  const ResultDisplay = () => {
+    console.log("Rendering...");
     if (mode !== "city") {
       return (
-        <FlatList
-          data={filteredData}
-          renderItem={({ item }) => {
-            return <Text>{item.name}</Text>;
-          }}
-          keyExtractor={(item) => item.geonameId}
-        />
+        <View>
+          <Text style={styles.header}>{result.toUpperCase()}</Text>
+          <FlatList
+            data={filteredData}
+            renderItem={({ item }) => {
+              return <Text>{item.name}</Text>;
+            }}
+            keyExtractor={(item) => item.geonameId}
+          />
+        </View>
       );
-    } else return <Text>Displaying city population results..</Text>;
+    } else
+      return (
+        <View>
+          <Text style={styles.header}>{result.name.toUpperCase()}</Text>
+          <Text>
+            Displaying population results for {result.name}... pop :{" "}
+            {result.population}
+          </Text>
+        </View>
+      );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{country.toUpperCase()}</Text>
-      {ResultsDisplay()}
+      {loading ? <Text>Loading...</Text> : ResultDisplay()}
     </View>
   );
 }
