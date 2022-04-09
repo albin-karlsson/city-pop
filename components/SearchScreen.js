@@ -4,7 +4,6 @@ import {
   View,
   Text,
   Keyboard,
-  TextInput,
   Alert,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -18,25 +17,26 @@ function SearchScreen({ route, navigation }) {
 
   const showResults = async () => {
     if (searchTerm.length > 1) {
-      // Make API call to check if any results
-      // Send those results to the results page
-      // If no results, promt the user to add a new country or city
-
+      // Construct api url
       const url = `http://api.geonames.org/searchJSON?q=${searchTerm}&username=weknowit`;
 
+      // Make async api call and convert to JavaScript object
       const res = await fetch(url);
       const data = await res.json();
 
+      // If api call successful... Navigate to results page
       if (data.totalResultsCount > 0) {
         navigation.navigate("Results", {
           mode: mode,
           searchTerm: searchTerm,
           data: data.geonames,
         });
-      } else {
+      } // If no results from api call
+      else {
         Alert.alert("Ooops...", `Please enter another ${mode}`);
       }
-    } else {
+    } // If no search term
+    else {
       Alert.alert("Ooops...", `Please enter a ${mode}`);
     }
   };
@@ -48,7 +48,7 @@ function SearchScreen({ route, navigation }) {
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        Keyboard.dismiss(); // A press outside the keyboard will dismiss it if its present
+        Keyboard.dismiss(); // A press outside the keyboard will dismiss it if it is present
       }}
     >
       <View style={styles.container}>
