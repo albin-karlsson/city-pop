@@ -15,7 +15,6 @@ function SearchScreen({ route, navigation }) {
   const { mode } = route.params;
   let [searchTerm, setSearchTerm] = useState("");
   let [loading, setLoading] = useState(false);
-  let filterResult = [];
 
   const showResults = async () => {
     if (searchTerm.length > 1) {
@@ -42,10 +41,10 @@ function SearchScreen({ route, navigation }) {
         if (filterResult.length == 0) {
           Alert.alert(
             "Ooops...",
-            `No population data for ${searchTerm}, try searching for something else!`
+            `No relevant population data found searching for ${searchTerm}, try searching for something else!`
           );
         } else {
-          // Navigate to ResultsScreen
+          //Navigate to ResultsScreen
           navigation.navigate("Results", {
             mode: mode,
             data: filterResult,
