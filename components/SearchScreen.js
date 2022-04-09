@@ -26,7 +26,7 @@ function SearchScreen({ route, navigation }) {
 
       // Construct api url
       const username = "weknowit";
-      const url = `http://api.geonames.org/searchJSON?q=${searchTerm}&username=${username}`;
+      const url = `http://api.geonames.org/searchJSON?q=${searchTerm}&maxRows=300&username=${username}`;
 
       // Make async api call and convert to JavaScript object
       const res = await fetch(url);
@@ -37,6 +37,8 @@ function SearchScreen({ route, navigation }) {
         // Filter data from api
         const filterResult = filterData(data);
 
+        console.log(filterResult);
+
         // Check for relevant data after filtering
         if (filterResult.length == 0) {
           Alert.alert(
@@ -44,7 +46,7 @@ function SearchScreen({ route, navigation }) {
             `No relevant population data found searching for ${searchTerm}, try searching for something else!`
           );
         } else {
-          //Navigate to ResultsScreen
+          // Navigate to ResultsScreen
           navigation.navigate("Results", {
             mode: mode,
             data: filterResult,
