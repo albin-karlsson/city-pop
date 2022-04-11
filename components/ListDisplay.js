@@ -17,17 +17,20 @@ function ListDisplay({ onSelectCity, sortedCities, navigation }) {
       <View style={{ marginTop: 200 }}>
         <FlatList
           onEndReached={() => {
-            Alert.alert("Not here?", "Try searching for a city instead", [
-              {
-                text: "Cancel",
-              },
-              {
-                text: "OK",
-                onPress: () => navigation.navigate("Home"),
-              },
-            ]);
+            if (sortedCities.length > 10) {
+              Alert.alert("Not here?", "Try searching for a city instead", [
+                {
+                  text: "Cancel",
+                  style: "cancel",
+                },
+                {
+                  text: "OK",
+                  onPress: () => navigation.navigate("Home"),
+                },
+              ]);
+            }
           }}
-          onEndReachedThreshold={0.5}
+          onEndReachedThreshold={0.1}
           ListFooterComponent={<View style={{ height: 400 }} />}
           data={sortedCities}
           renderItem={({ item }) => {
