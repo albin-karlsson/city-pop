@@ -5,7 +5,7 @@ A small mobile app for displaying country and city population, made with the Rea
    * [npm start](#npm-start)
 * [Using the App](#using-the-app)
    * [Search by City](#search-by-city)
-      * Instructions
+      * Instructions(#search-by-city#instructions)
       * About
   * [Search by Country](#search-by-country)
       * Instructions
@@ -29,9 +29,9 @@ Going back from the page displaying population for any specific country will ret
 
 Input a city in the search box and tap the magnifying glass to search for a city and display its population. 
 
-Searches are not case sensitive, but the name will have to match the returned city exactly.
-
 #### About
+
+Searches are not case sensitive, but the name will have to match the returned city exactly.
 
 If there are multiple cities with the same name the one with the highest population will be displayed.
 
