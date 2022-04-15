@@ -5,7 +5,7 @@ A small mobile app for displaying country and city population, made with the Rea
    * [npm start](#npm-start)
 * [Using the App](#using-the-app)
    * [Search by City](#search-by-city)
-      * Instructions(#search-by-city#instructions)
+      * [Instructions](#search-by-city#instructions)
       * About
   * [Search by Country](#search-by-country)
       * Instructions
