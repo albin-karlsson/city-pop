@@ -2,7 +2,7 @@
 A small mobile app for displaying country and city population, made with the React Native library.
 
 * [Running the App](#running-the-app)
-   * [npm start](#npm-start)
+   * [Starting the app](#npm-start)
 * [Using the App](#using-the-app)
    * [Search by City](#search-by-city)
       * Instructions
