@@ -47,4 +47,4 @@ Searches are not case sensitive.
 
 If no country was found an alert will show, asking the user if they meant to put in a city instead, and provide a button to go the the [Search by City](#search-by-city) screen.
 
-While searching for a country, there may be data available for more cities than what shows up in the list of search results. If the user has scrolled some length down the list of results, and there are more than 10 cities in the list of results, an alert will pop up, prompting the user to put in the city directly instead.
+While searching for a country, there may be data available for more cities than what shows up in the list of search results. If the user has scrolled some length down the list of results, and there are more than 10 cities in the list of results, an alert will pop up, prompting the user to search for the city directly instead.
