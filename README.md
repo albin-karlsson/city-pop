@@ -21,7 +21,7 @@ Open it in the [Expo app](https://expo.io) on your phone to view it. It will rel
 
 ## Using the App
 
-Going back from the page displaying population for any specific country will return the user to the home screen.
+Going back while on the page displaying city population will return the user back to the home screen.
 
 ### Search by City
 
