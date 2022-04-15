@@ -27,7 +27,9 @@ Going back from the page displaying population for any specific country will ret
 
 #### Instructions 
 
-Input a city in the search box and tap the magnifying glass to search for a city and display its population. Searches are not case sensitive, but the name will match the returned city exactly.
+Input a city in the search box and tap the magnifying glass to search for a city and display its population. 
+
+Searches are not case sensitive, but the name will have to match the returned city exactly.
 
 #### About
 
@@ -43,6 +45,6 @@ Input a country in the search box and tap the magnifying glass to search for a c
 
 Searches are not case sensitive.
 
-If no country was found an alert will show, asking the user if they meant to put in a city instead, and provide a button to go the the Search by City screen.
+If no country was found an alert will show, asking the user if they meant to put in a city instead, and provide a button to go the the [Search by City](#search-by-city) screen.
 
 There might be data available for more cities than the ones that show up in the list of search results. If the user has scrolled some length down the list of results, an alert will pop up, asking the user to put in the city directly if they cannot find it in the list.
